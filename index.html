@@ -1,0 +1,736 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkDeath Documentation - 0.2.1</title>
+<meta name="description" content="SkDeath 0.2.1 syntax documentation for Skript 2.6.5-for-1.8 and Minecraft 1.8.8.">
+<style>
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --surface-2: #f0f2f5;
+  --border: #d9dee7;
+  --text: #20252d;
+  --muted: #68707c;
+  --link: #5a45cc;
+  --link-soft: #eeeafd;
+  --accent: #8a2be2;
+  --code-bg: #181a1f;
+  --code-text: #f4f5f7;
+  --shadow: 0 2px 10px rgba(22, 27, 35, .06);
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #101216;
+    --surface: #171a20;
+    --surface-2: #1f232b;
+    --border: #303641;
+    --text: #eceff3;
+    --muted: #a4acb8;
+    --link: #b8aaff;
+    --link-soft: #292343;
+    --accent: #b46cff;
+    --code-bg: #0c0e11;
+    --code-text: #eef0f3;
+    --shadow: 0 2px 10px rgba(0, 0, 0, .20);
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, pre, .syntax { font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace; }
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(10px);
+}
+.topbar-inner {
+  max-width: 1420px;
+  margin: auto;
+  min-height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 18px;
+}
+.brand { font-weight: 750; white-space: nowrap; }
+.brand small { color: var(--muted); font-weight: 500; margin-left: 5px; }
+.nav { display: flex; gap: 3px; overflow-x: auto; }
+.nav a { padding: 7px 10px; border-radius: 7px; color: var(--muted); font-size: 14px; white-space: nowrap; }
+.nav a:hover, .nav a.active { background: var(--link-soft); color: var(--link); text-decoration: none; }
+.version { margin-left: auto; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.layout {
+  max-width: 1420px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 245px minmax(0, 1fr);
+  gap: 30px;
+  padding: 28px 18px 70px;
+}
+.sidebar {
+  position: sticky;
+  top: 82px;
+  align-self: start;
+  max-height: calc(100vh - 105px);
+  overflow: auto;
+  padding-right: 8px;
+}
+.sidebar h4 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.side-group { margin: 0 0 20px; }
+.side-group a { display: block; padding: 5px 8px; border-radius: 6px; color: var(--muted); font-size: 14px; }
+.side-group a:hover { background: var(--surface-2); color: var(--text); text-decoration: none; }
+.searchbox { margin-bottom: 18px; }
+.searchbox input {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 7px;
+  padding: 9px 10px;
+  outline: none;
+}
+.searchbox input:focus { border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 15%, transparent); }
+main { min-width: 0; }
+.hero {
+  border-bottom: 1px solid var(--border);
+  padding: 6px 0 28px;
+  margin-bottom: 30px;
+}
+.hero h1 { font-size: clamp(30px, 4vw, 44px); margin: 0 0 7px; letter-spacing: -.025em; }
+.hero p { max-width: 860px; margin: 7px 0; color: var(--muted); }
+.badges { display: flex; flex-wrap: wrap; gap: 7px; margin: 15px 0 0; }
+.badge { border: 1px solid var(--border); background: var(--surface); border-radius: 999px; padding: 3px 8px; color: var(--muted); font-size: 12px; }
+.section { margin: 36px 0 48px; scroll-margin-top: 83px; }
+.section > h2 { font-size: 28px; margin: 0 0 6px; }
+.section > .intro { color: var(--muted); margin: 0 0 20px; }
+.subsection { margin: 28px 0 36px; scroll-margin-top: 83px; }
+.subsection h3 { font-size: 21px; margin: 0 0 12px; }
+.doc-card {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 9px;
+  margin: 16px 0;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.card-head { padding: 14px 16px 10px; border-bottom: 1px solid var(--border); }
+.kind { color: var(--muted); text-transform: uppercase; letter-spacing: .07em; font-size: 11px; font-weight: 700; }
+.card-head h4 { margin: 3px 0 0; font-size: 18px; }
+.card-body { padding: 14px 16px 16px; }
+.field { margin: 8px 0; }
+.field-label { display: inline-block; min-width: 105px; color: var(--muted); font-size: 13px; vertical-align: top; }
+.field-value { display: inline; }
+.pattern-list { margin: 5px 0 4px 105px; padding-left: 20px; }
+.pattern-list li { margin: 4px 0; }
+.syntax {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: block;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: var(--text);
+}
+pre.example {
+  margin: 10px 0;
+  padding: 14px 15px;
+  background: var(--code-bg);
+  color: var(--code-text);
+  border-radius: 7px;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+.note {
+  border-left: 3px solid var(--accent);
+  padding: 10px 12px;
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface));
+  margin: 16px 0;
+}
+.toc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }
+.toc-item { border: 1px solid var(--border); background: var(--surface); padding: 13px; border-radius: 8px; }
+.toc-item strong { display: block; }
+.api-table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 14px; }
+.api-table th, .api-table td { border: 1px solid var(--border); text-align: left; padding: 8px 9px; vertical-align: top; }
+.api-table th { background: var(--surface-2); }
+footer { max-width: 1420px; margin: 0 auto; padding: 20px 18px 50px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--border); }
+.hidden { display: none !important; }
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+  .sidebar { position: static; max-height: none; padding: 0; }
+  .side-group { display: none; }
+  .sidebar .searchbox { margin-bottom: 0; }
+  .version { display: none; }
+  .nav { display: none; }
+  .pattern-list { margin-left: 0; }
+  .field-label { min-width: 0; display: block; margin-bottom: 2px; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">SkDeath <small>0.2.1</small></div>
+    <nav class="nav" aria-label="Main navigation">
+      <a class="active" href="#docs">Docs</a>
+      <a href="#events">Events</a>
+      <a href="#conditions">Conditions</a>
+      <a href="#sections">Sections</a>
+      <a href="#effects">Effects</a>
+      <a href="#expressions">Expressions</a>
+      <a href="#types">Types</a>
+      <a href="#compatibility">Compatibility</a>
+      <a href="#examples">Examples</a>
+    </nav>
+    <div class="version">Skript 2.6.5-for-1.8 · Minecraft 1.8.8</div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="searchbox">
+      <input id="search" type="search" placeholder="Search SkDeath syntax…" aria-label="Search documentation">
+    </div>
+    <div class="side-group">
+      <h4>Documentation</h4>
+      <a href="#docs">Overview</a>
+      <a href="#syntax-conventions">Syntax conventions</a>
+      <a href="#compatibility">Compatibility</a>
+    </div>
+    <div class="side-group">
+      <h4>Scoreboards</h4>
+      <a href="#ExprNewScoreboard">New scoreboard</a>
+      <a href="#ExprPlayerScoreboard">Player scoreboard</a>
+      <a href="#ExprScoreboardProperties">Properties</a>
+      <a href="#EffScoreboard">Scoreboard effects</a>
+      <a href="#CondScoreboard">Display condition</a>
+    </div>
+    <div class="side-group">
+      <h4>Dictionaries</h4>
+      <a href="#ExprNewDictionary">New dictionary</a>
+      <a href="#ExprDictionaryValue">Values</a>
+      <a href="#ExprDictionaryKeys">Keys</a>
+      <a href="#ExprDictionaryValues">Values collection</a>
+      <a href="#ExprDictionarySize">Size</a>
+      <a href="#SecForDictionary">For dictionary</a>
+      <a href="#EffDictionary">Dictionary effects</a>
+    </div>
+    <div class="side-group">
+      <h4>Other</h4>
+      <a href="#placeholders">PlaceholderAPI</a>
+      <a href="#player">Player utilities</a>
+      <a href="#npc">Citizens NPCs</a>
+    </div>
+  </aside>
+
+  <main id="docs">
+    <section class="hero">
+      <h1>SkDeath Documentation</h1>
+      <p>Syntax reference for SkDeath, an addon targeting Matocolotoe's Skript <code>2.6.5-for-1.8</code> fork on Minecraft 1.8.8.</p>
+      <p>This documentation follows the conventions of the official Skript documentation: every syntax entry identifies its type, patterns, return type, requirements, description, and examples.</p>
+      <div class="badges">
+        <span class="badge">SkDeath 0.2.1</span>
+        <span class="badge">Minecraft 1.8.8</span>
+        <span class="badge">Skript 2.6.5-for-1.8</span>
+        <span class="badge">Java 8 target</span>
+      </div>
+    </section>
+
+    <section class="section" id="syntax-conventions">
+      <h2>Syntax Conventions</h2>
+      <p class="intro">Patterns below use Skript's normal pattern notation.</p>
+      <table class="api-table">
+        <tr><th>Notation</th><th>Meaning</th></tr>
+        <tr><td><code>%type%</code></td><td>An expression of the specified Skript type.</td></tr>
+        <tr><td><code>[text]</code></td><td>Optional syntax.</td></tr>
+        <tr><td><code>(a|b)</code></td><td>One of the listed alternatives.</td></tr>
+        <tr><td><code>%string%</code></td><td>A text/string expression.</td></tr>
+        <tr><td><code>%number%</code></td><td>A numeric expression.</td></tr>
+        <tr><td><code>%players%</code></td><td>One or more Bukkit players.</td></tr>
+        <tr><td><code>%scoreboard%</code></td><td>A SkDeath scoreboard object.</td></tr>
+        <tr><td><code>%dictionary%</code></td><td>A SkDeath dictionary object.</td></tr>
+        <tr><td><code>%npc%</code></td><td>A SkDeath Citizens NPC object.</td></tr>
+      </table>
+    </section>
+
+    <section class="section" id="types">
+      <h2>Types</h2>
+      <p class="intro">Custom object types exposed by SkDeath.</p>
+
+      <article class="doc-card" id="type-scoreboard">
+        <div class="card-head"><div class="kind">Type</div><h4>Scoreboard</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">%scoreboard%</code></span></div>
+          <div class="field"><span class="field-label">Aliases:</span><span class="field-value">scoreboard, scoreboards</span></div>
+          <div class="field"><span class="field-label">Since:</span><span class="field-value">0.2.0</span></div>
+          <p>A SkDeath-managed sidebar scoreboard. The same object can be displayed to multiple players, making it suitable for shared/global scoreboards. Separate objects can be assigned to individual players for per-player displays.</p>
+        </div>
+      </article>
+
+      <article class="doc-card" id="type-dictionary">
+        <div class="card-head"><div class="kind">Type</div><h4>Dictionary</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">%dictionary%</code></span></div>
+          <div class="field"><span class="field-label">Aliases:</span><span class="field-value">dictionary, dictionaries</span></div>
+          <div class="field"><span class="field-label">Since:</span><span class="field-value">0.2.0</span></div>
+          <p>A nested key-value object. Dot-separated paths such as <code>server.players.online</code> automatically create nested dictionaries.</p>
+        </div>
+      </article>
+
+      <article class="doc-card" id="type-npc">
+        <div class="card-head"><div class="kind">Type</div><h4>NPC</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">%npc%</code></span></div>
+          <div class="field"><span class="field-label">Aliases:</span><span class="field-value">npc, npcs, citizen, citizens</span></div>
+          <div class="field"><span class="field-label">Requirements:</span><span class="field-value">Citizens</span></div>
+          <div class="field"><span class="field-label">Since:</span><span class="field-value">0.2.0</span></div>
+          <p>A Citizens NPC controlled by SkDeath. NPC syntax is only registered when Citizens is present.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="expressions">
+      <h2>Expressions</h2>
+      <p class="intro">Expressions return values that can be used in other Skript syntax.</p>
+
+      <article class="doc-card" id="ExprNewScoreboard">
+        <div class="card-head"><div class="kind">Expression</div><h4>New Scoreboard</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list">
+            <li><code>a new (scoreboard|sidebar)</code></li>
+            <li><code>a new (scoreboard|sidebar) (named|with title) %string%</code></li>
+            <li><code>a new (scoreboard|sidebar) with lines %strings%</code></li>
+            <li><code>a new (scoreboard|sidebar) (named|with title) %string% with lines %strings%</code></li>
+          </ul>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>scoreboard</code></span></div>
+          <div class="field"><span class="field-label">Since:</span><span class="field-value">0.2.0</span></div>
+          <p>Creates a new SkDeath scoreboard. When a line list is supplied, lines are inserted in order starting at line 1.</p>
+          <pre class="example">set {_board} to a new scoreboard named "&amp;c&amp;lServer" with lines "&amp;7Welcome", "", "&amp;fPlayers: &amp;a%number of all players%"
+show {_board} for all players</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprPlayerScoreboard">
+        <div class="card-head"><div class="kind">Expression</div><h4>Player Scoreboard</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list"><li><code>%player%'[s] scoreboard</code></li><li><code>scoreboard of %player%</code></li></ul>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>scoreboard</code></span></div>
+          <p>Returns the SkDeath scoreboard associated with the player's current scoreboard state.</p>
+          <pre class="example">set line 1 of player's scoreboard to "&amp;aHello"
+set title of scoreboard of player to "&amp;e&amp;lStats"</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprScoreboardProperties">
+        <div class="card-head"><div class="kind">Expression</div><h4>Scoreboard Properties</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list"><li><code>title of %scoreboard%</code></li><li><code>line %number% of %scoreboard%</code></li></ul>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>text</code></span></div>
+          <p>Reads the title or one stored line of a SkDeath scoreboard.</p>
+          <pre class="example">set {_title} to title of {_board}
+set {_line} to line 3 of {_board}
+message "Title: %{_title}%"
+message "Line 3: %{_line}%"</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprNewDictionary">
+        <div class="card-head"><div class="kind">Expression</div><h4>New Dictionary</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">a new dictionary</code></span></div>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>dictionary</code></span></div>
+          <p>Creates an empty dictionary.</p>
+          <pre class="example">set {_dict} to a new dictionary</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprDictionaryValue">
+        <div class="card-head"><div class="kind">Expression</div><h4>Dictionary Value</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list"><li><code>value of %dictionary% at %string%</code></li><li><code>%dictionary%.%string%</code></li></ul>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>object</code></span></div>
+          <p>Returns the value stored at a dot-separated path. The dictionary object supports nested paths such as <code>server.players.online</code>.</p>
+          <pre class="example">set key "server.name" of {_dict} to "SkDeath"
+set key "server.players.online" of {_dict} to 7
+set {_name} to value of {_dict} at "server.name"
+set {_online} to {_dict}.server.players.online</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprDictionaryKeys">
+        <div class="card-head"><div class="kind">Expression</div><h4>Dictionary Keys</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">keys of %dictionary%</code></span></div>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>text</code> (multiple)</span></div>
+          <p>Returns the dictionary's top-level keys.</p>
+          <pre class="example">set {_keys::*} to keys of {_dict}
+loop {_keys::*}:
+    message "Key: %loop-value%"</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprDictionaryValues">
+        <div class="card-head"><div class="kind">Expression</div><h4>Dictionary Values</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">values of %dictionary%</code></span></div>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>object</code> (multiple)</span></div>
+          <p>Returns the dictionary's top-level values in insertion order.</p>
+          <pre class="example">set {_values::*} to values of {_dict}</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprDictionarySize">
+        <div class="card-head"><div class="kind">Expression</div><h4>Dictionary Size</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">size of %dictionary%</code></span></div>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>number</code></span></div>
+          <p>Returns the number of top-level entries in the dictionary.</p>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprNPC">
+        <div class="card-head"><div class="kind">Expression</div><h4>NPC From ID</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">npc from id %number%</code></span></div>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>npc</code></span></div>
+          <div class="field"><span class="field-label">Requirements:</span><span class="field-value">Citizens</span></div>
+          <p>Retrieves an NPC created and registered by SkDeath using its numeric Citizens ID.</p>
+          <pre class="example">set {_npc} to npc from id 12
+set name of {_npc} to "&amp;aGuide"</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprNPCClickType">
+        <div class="card-head"><div class="kind">Expression</div><h4>NPC Click Type</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list"><li><code>event[- ]npc click type</code></li><li><code>event click type</code></li></ul>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>text</code></span></div>
+          <div class="field"><span class="field-label">Values:</span><span class="field-value"><code>left</code>, <code>right</code></span></div>
+          <div class="field"><span class="field-label">Requirements:</span><span class="field-value">Citizens; <code>on npc activate</code></span></div>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprPlaceholder">
+        <div class="card-head"><div class="kind">Expression</div><h4>Placeholder</h4></div>
+        <div class="card-body" id="placeholders">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list"><li><code>[the] placeholder [named] %string%</code></li><li><code>[the] placeholder [named] %string% for %player%</code></li></ul>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>text</code></span></div>
+          <div class="field"><span class="field-label">Requirements:</span><span class="field-value">PlaceholderAPI is required for external PAPI placeholders; local SkDeath placeholders work without it.</span></div>
+          <p>Resolves a PlaceholderAPI placeholder when available. If PlaceholderAPI is unavailable or a placeholder cannot be resolved, the original placeholder text is returned.</p>
+          <pre class="example">set {_rank} to placeholder named "%vault_rank%" for player
+message "Rank: %{_rank}%"</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="ExprDisplayName">
+        <div class="card-head"><div class="kind">Expression</div><h4>Display Name</h4></div>
+        <div class="card-body" id="player">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list"><li><code>display name of %player%</code></li><li><code>%player%'[s] display name</code></li></ul>
+          <div class="field"><span class="field-label">Return type:</span><span class="field-value"><code>text</code></span></div>
+          <p>Returns the Bukkit display name of a player. This is not the player's immutable Bukkit name.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="effects">
+      <h2>Effects</h2>
+      <p class="intro">Effects modify SkDeath objects or Bukkit state.</p>
+
+      <article class="doc-card" id="EffScoreboard">
+        <div class="card-head"><div class="kind">Effect</div><h4>Scoreboard Effects</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list">
+            <li><code>(display|show) %scoreboard% (for|to) %players%</code></li>
+            <li><code>hide %scoreboard% (from|for) %players%</code></li>
+            <li><code>set title of %scoreboard% to %string%</code></li>
+            <li><code>set line %number% of %scoreboard% to %string%</code></li>
+            <li><code>clear line %number% of %scoreboard%</code></li>
+            <li><code>set title of %player%'[s] scoreboard to %string%</code></li>
+            <li><code>set line %number% of %player%'[s] scoreboard to %string%</code></li>
+            <li><code>clear line %number% of %player%'[s] scoreboard</code></li>
+            <li><code>set %player%'[s] scoreboard to %scoreboard%</code></li>
+            <li><code>set scoreboard of %player% to %scoreboard%</code></li>
+            <li><code>destroy %scoreboard%</code></li>
+          </ul>
+          <div class="field"><span class="field-label">Since:</span><span class="field-value">0.2.0</span></div>
+          <p>A shared scoreboard is simply one scoreboard object shown to multiple players. A per-player scoreboard is achieved by creating a separate object and assigning it to one player.</p>
+          <pre class="example">set {_board} to a new scoreboard named "&amp;c&amp;lServer"
+set line 1 of {_board} to "&amp;fPlayers: &amp;a%number of all players%"
+show {_board} for all players
+
+set {_personal} to a new scoreboard named "&amp;b&amp;lStats"
+set line 1 of {_personal} to "&amp;fPlayer: &amp;a%player%"
+set player's scoreboard to {_personal}</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="EffDictionary">
+        <div class="card-head"><div class="kind">Effect</div><h4>Dictionary Effects</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list">
+            <li><code>set key %string% of %dictionary% to %object%</code></li>
+            <li><code>set value at %string% of %dictionary% to %object%</code></li>
+            <li><code>delete key %string% of %dictionary%</code></li>
+            <li><code>clear %dictionary%</code></li>
+            <li><code>set %dictionary%.%string% to %object%</code></li>
+          </ul>
+          <p>Dot-separated paths create nested dictionaries automatically.</p>
+          <pre class="example">set {_dict} to a new dictionary
+set key "server.name" of {_dict} to "SkDeath"
+set key "server.players.online" of {_dict} to 12
+set {_dict}.server.version to "0.2.1"
+delete key "server.version" of {_dict}
+clear {_dict}</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="EffPlaceholder">
+        <div class="card-head"><div class="kind">Effect</div><h4>Placeholder Values</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list">
+            <li><code>set value of placeholder [(with name|named)] %string% to %string%</code></li>
+            <li><code>delete value of placeholder [(with name|named)] %string%</code></li>
+          </ul>
+          <div class="field"><span class="field-label">Scope:</span><span class="field-value">Server-wide local SkDeath placeholder map.</span></div>
+          <pre class="example">set value of placeholder named "server_name" to "SkDeath"
+message "%placeholder named \"server_name\"%"
+delete value of placeholder named "server_name"</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="EffPlayer">
+        <div class="card-head"><div class="kind">Effect</div><h4>Player Utilities</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list">
+            <li><code>set display name of %player% to %string%</code></li>
+            <li><code>set %player%'[s] display name to %string%</code></li>
+            <li><code>delete display name of %player%</code></li>
+            <li><code>delete %player%'[s] display name</code></li>
+            <li><code>broadcast %string% to %world%</code></li>
+          </ul>
+          <p>Display names are Bukkit display names and therefore can affect contexts such as chat or tab display where a plugin uses the Bukkit display name.</p>
+          <pre class="example">set player's display name to "&amp;cAdmin"
+broadcast "&amp;aHello everyone in this world!" to player's world
+delete player's display name</pre>
+        </div>
+      </article>
+
+      <article class="doc-card" id="EffNPC">
+        <div class="card-head"><div class="kind">Effect</div><h4>Citizens NPC Effects</h4></div>
+        <div class="card-body" id="npc">
+          <div class="field"><span class="field-label">Requirements:</span><span class="field-value">Citizens</span></div>
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list">
+            <li><code>set %npc% to a new (npc|citizen)</code></li>
+            <li><code>set %npc% to a new (npc|citizen) (named|with name) %string%</code></li>
+            <li><code>set %npc% to a new (npc|citizen) (of|with) type %string%</code></li>
+            <li><code>set %npc% to a new (npc|citizen) (named|with name) %string% (of|with) type %string%</code></li>
+            <li><code>set %npc% to a new (npc|citizen) (named|with name) %string% at %location%</code></li>
+            <li><code>set %npc% to a new (npc|citizen) (named|with name) %string% (of|with) type %string% at %location%</code></li>
+            <li><code>set name of %npc% to %string%</code></li>
+            <li><code>set %npc%'s name to %string%</code></li>
+            <li><code>destroy %npc%</code></li>
+            <li><code>set skin of %npc% to %player%</code></li>
+            <li><code>set skin of %npc% to url %string%</code></li>
+            <li><code>set left-click action of %npc% to player %string%</code></li>
+            <li><code>set left-click action of %npc% to server %string%</code></li>
+            <li><code>set right-click action of %npc% to player %string%</code></li>
+            <li><code>set right-click action of %npc% to server %string%</code></li>
+            <li><code>clear left-click action of %npc%</code></li>
+            <li><code>clear right-click action of %npc%</code></li>
+          </ul>
+          <div class="note">The NPC creation syntax passes the supplied type string to Citizens. Use a type accepted by the Citizens version installed on the server.</div>
+          <pre class="example">set {_npc} to a new npc named "&amp;6Guide" of type "PLAYER" at player's location
+set left-click action of {_npc} to player "say Hello"
+set right-click action of {_npc} to server "say NPC clicked"
+set skin of {_npc} to player</pre>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="conditions">
+      <h2>Conditions</h2>
+      <article class="doc-card" id="CondScoreboard">
+        <div class="card-head"><div class="kind">Condition</div><h4>Scoreboard Display</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list"><li><code>%scoreboard% is shown to %player%</code></li><li><code>%scoreboard% is not shown to %player%</code></li></ul>
+          <div class="field"><span class="field-label">Since:</span><span class="field-value">0.2.0</span></div>
+          <pre class="example">if {_board} is shown to player:
+    send "&amp;aThe board is visible."
+
+if {_board} is not shown to player:
+    send "&amp;cThe board is hidden."</pre>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="sections">
+      <h2>Sections</h2>
+      <article class="doc-card" id="SecForDictionary">
+        <div class="card-head"><div class="kind">Section</div><h4>For Dictionary</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Patterns:</span></div>
+          <ul class="pattern-list"><li><code>for %objects%, %objects% (in|of) %dictionary%</code></li><li><code>for %objects% (in|of) %dictionary%</code></li></ul>
+          <p>The two-variable form assigns each top-level key and value. The one-variable form assigns each top-level key.</p>
+          <pre class="example">for {_key}, {_value} in {_dict}:
+    broadcast "%{_key}% = %{_value}%"
+
+for {_key} in {_dict}:
+    broadcast "Key: %{_key}%"</pre>
+          <div class="note">Iteration is over the dictionary's top-level entries. Nested dictionaries are still stored as values under their parent key.</div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="events">
+      <h2>Events</h2>
+      <article class="doc-card" id="EvtNPCActivate">
+        <div class="card-head"><div class="kind">Event</div><h4>NPC Activate</h4></div>
+        <div class="card-body">
+          <div class="field"><span class="field-label">Pattern:</span><span class="field-value"><code class="syntax">[on] npc activate</code></span></div>
+          <div class="field"><span class="field-label">Requirements:</span><span class="field-value">Citizens</span></div>
+          <p>Fired when a tracked SkDeath NPC is activated by a player through a Citizens click event.</p>
+          <table class="api-table">
+            <tr><th>Event value</th><th>Type</th><th>Description</th></tr>
+            <tr><td><code>event-npc</code></td><td>NPC</td><td>The SkDeath NPC that was activated.</td></tr>
+            <tr><td><code>event-player</code></td><td>Player</td><td>The player who activated the NPC.</td></tr>
+            <tr><td><code>event npc click type</code></td><td>Text</td><td><code>left</code> or <code>right</code>.</td></tr>
+          </table>
+          <pre class="example">on npc activate:
+    send "NPC: %event-npc%" to event-player
+    send "Player: %event-player%" to event-player
+    send "Click: %event npc click type%" to event-player</pre>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="compatibility">
+      <h2>Compatibility</h2>
+      <p class="intro">SkDeath 0.2.1 is intentionally tied to the old 1.8 Skript environment.</p>
+      <div class="note"><strong>Target stack:</strong> Matocolotoe's Skript <code>2.6.5-for-1.8</code> fork on Minecraft/Spigot-compatible 1.8.8. Do not substitute a modern Skript build.</div>
+      <table class="api-table">
+        <tr><th>Dependency</th><th>Status</th><th>Notes</th></tr>
+        <tr><td>Skript 2.6.5-for-1.8</td><td>Required</td><td>Primary API target for SkDeath syntax registration.</td></tr>
+        <tr><td>Spigot/Bukkit 1.8.8</td><td>Required runtime platform</td><td>SkDeath uses the legacy Bukkit scoreboard/player APIs available on 1.8.8.</td></tr>
+        <tr><td>PlaceholderAPI</td><td>Optional</td><td>Used when resolving external PlaceholderAPI placeholders. Local SkDeath placeholder values do not require PAPI.</td></tr>
+        <tr><td>Citizens</td><td>Optional</td><td>NPC syntax and the <code>npc activate</code> event are only enabled when Citizens is present.</td></tr>
+      </table>
+      <div class="note">Do not install a modern SkQuery release on this 1.8 fork unless the specific build is known to support the fork. An incompatible addon can fail while Skript is compiling unrelated script syntax.</div>
+    </section>
+
+    <section class="section" id="examples">
+      <h2>Examples</h2>
+      <div class="subsection">
+        <h3>Shared server scoreboard</h3>
+        <pre class="example">command /serverboard:
+    trigger:
+        set {_board} to a new scoreboard named "&amp;c&amp;lServer"
+        set line 1 of {_board} to "&amp;7Welcome!"
+        set line 2 of {_board} to ""
+        set line 3 of {_board} to "&amp;fPlayers: &amp;a%number of all players%"
+        show {_board} for all players</pre>
+      </div>
+      <div class="subsection">
+        <h3>Per-player scoreboard</h3>
+        <pre class="example">command /stats:
+    trigger:
+        set {_board} to a new scoreboard named "&amp;b&amp;lStats"
+        set line 1 of {_board} to "&amp;fPlayer: &amp;a%player%"
+        set line 2 of {_board} to "&amp;fWorld: &amp;d%world of player%"
+        set line 3 of {_board} to "&amp;fHealth: &amp;c%health of player%"
+        set player's scoreboard to {_board}</pre>
+      </div>
+      <div class="subsection">
+        <h3>Nested dictionary</h3>
+        <pre class="example">set {_data} to a new dictionary
+set key "server.name" of {_data} to "SkDeath"
+set key "server.version" of {_data} to "0.2.1"
+set key "player.name" of {_data} to player's name
+set key "player.stats.health" of {_data} to health of player
+
+set {_health} to {_data}.player.stats.health
+message "Health: %{_health}%"</pre>
+      </div>
+      <div class="subsection">
+        <h3>NPC interaction</h3>
+        <pre class="example">command /guide:
+    trigger:
+        set {_npc} to a new npc named "&amp;6Guide" of type "PLAYER" at player's location
+        set left-click action of {_npc} to player "say You left-clicked the guide."
+        set right-click action of {_npc} to server "say The guide was right-clicked."
+        set skin of {_npc} to player
+
+on npc activate:
+    send "&amp;7You clicked &amp;e%event-npc% &amp;7with &amp;e%event npc click type%&amp;7." to event-player</pre>
+      </div>
+    </section>
+
+    <section class="section" id="future">
+      <h2>Not currently implemented</h2>
+      <p class="intro">The following ideas are part of the broader SkDeath design but are not registered by version 0.2.1.</p>
+      <ul>
+        <li>Literal dictionary syntax such as <code>{ key: value }</code>. The 1.8 Skript parser already gives braces special variable meaning, so SkDeath currently uses a dictionary object API instead.</li>
+        <li>Numeric scoreboard scores/objectives exposed as a separate SkDeath API.</li>
+        <li>Full Citizens action-type/type-specific abstractions beyond the current string-based creation and action interfaces.</li>
+        <li>Additional player utilities beyond display names and world broadcasts.</li>
+      </ul>
+    </section>
+  </main>
+</div>
+
+<footer>
+  <div><strong>SkDeath 0.2.1</strong> · Documentation for Skript 2.6.5-for-1.8 and Minecraft 1.8.8.</div>
+  <div style="margin-top:6px">Documentation structure is modeled after the public Skript documentation conventions; syntax and feature descriptions here are specific to SkDeath.</div>
+</footer>
+
+<script>
+const search = document.getElementById('search');
+const cards = [...document.querySelectorAll('.doc-card')];
+search.addEventListener('input', () => {
+  const q = search.value.trim().toLowerCase();
+  if (!q) { cards.forEach(c => c.classList.remove('hidden')); return; }
+  cards.forEach(card => {
+    const text = card.innerText.toLowerCase();
+    card.classList.toggle('hidden', !text.includes(q));
+  });
+});
+
+const navLinks = [...document.querySelectorAll('.nav a')];
+const sections = [...document.querySelectorAll('.section')];
+const observer = new IntersectionObserver(entries => {
+  const visible = entries.filter(e => e.isIntersecting).sort((a,b) => b.intersectionRatio-a.intersectionRatio)[0];
+  if (!visible) return;
+  navLinks.forEach(a => a.classList.remove('active'));
+  const link = navLinks.find(a => a.getAttribute('href') === '#' + visible.target.id);
+  if (link) link.classList.add('active');
+}, {rootMargin: '-20% 0px -65% 0px', threshold: [0, .1, .4]});
+sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
